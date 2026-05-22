@@ -126,13 +126,16 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 
 /* SKILLS */
 .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
-.skill-group { }
 .skill-group-title { font-size: 9px; letter-spacing: 0.25em; color: var(--amber); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dimmest); }
-.skill-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(0,255,65,0.04); }
+.skill-item { padding: 8px 0; border-bottom: 1px solid rgba(0,255,65,0.04); }
+.skill-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 5px; }
 .skill-name { font-family: var(--body); font-size: 13px; color: var(--dim); font-weight: 300; }
-.skill-level { display: flex; gap: 3px; }
-.skill-pip { width: 8px; height: 8px; border: 1px solid var(--dimmest); }
-.skill-pip.filled { background: var(--green); border-color: var(--green); box-shadow: 0 0 4px rgba(0,255,65,0.4); }
+.skill-pct { font-size: 9px; letter-spacing: 0.1em; color: var(--dimmer); font-family: var(--mono); }
+.skill-bar-wrap { height: 2px; background: var(--dimmest); overflow: hidden; }
+.skill-bar { height: 2px; width: 0%; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); }
+.skill-bar.green { background: linear-gradient(90deg, var(--green), rgba(0,255,65,0.5)); box-shadow: 0 0 8px rgba(0,255,65,0.3); }
+.skill-bar.amber { background: linear-gradient(90deg, var(--amber), rgba(255,183,0,0.5)); box-shadow: 0 0 8px rgba(255,183,0,0.3); }
+.skill-bar.dim { background: linear-gradient(90deg, var(--dimmer), rgba(0,255,65,0.2)); }
 
 /* EDUCATION */
 .edu-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 2rem; position: relative; overflow: hidden; max-width: 700px; }
@@ -405,29 +408,29 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
     <div class="skill-group">
       <div class="skill-group-title">// INVESTIGATIONS & INTELLIGENCE //</div>
-      <div class="skill-item"><span class="skill-name">Criminal Investigations</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
-      <div class="skill-item"><span class="skill-name">OSINT</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Digital Evidence Analysis</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Intelligence Analysis</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Surveillance Operations</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Criminal Investigations</span><span class="skill-pct">95%</span></div><div class="skill-bar-wrap"><div class="skill-bar green" data-width="95"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">OSINT</span><span class="skill-pct">80%</span></div><div class="skill-bar-wrap"><div class="skill-bar green" data-width="80"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Digital Evidence Analysis</span><span class="skill-pct">85%</span></div><div class="skill-bar-wrap"><div class="skill-bar green" data-width="85"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Intelligence Analysis</span><span class="skill-pct">80%</span></div><div class="skill-bar-wrap"><div class="skill-bar green" data-width="80"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Surveillance Operations</span><span class="skill-pct">90%</span></div><div class="skill-bar-wrap"><div class="skill-bar green" data-width="90"></div></div></div>
     </div>
 
     <div class="skill-group">
       <div class="skill-group-title">// LEGAL & COMPLIANCE //</div>
-      <div class="skill-item"><span class="skill-name">Chain of Custody</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
-      <div class="skill-item"><span class="skill-name">HIPAA Compliance</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Warrant & Affidavit Prep</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Federal Court Testimony</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Multi-Agency Coordination</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Chain of Custody</span><span class="skill-pct">95%</span></div><div class="skill-bar-wrap"><div class="skill-bar amber" data-width="95"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">HIPAA Compliance</span><span class="skill-pct">85%</span></div><div class="skill-bar-wrap"><div class="skill-bar amber" data-width="85"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Warrant & Affidavit Prep</span><span class="skill-pct">95%</span></div><div class="skill-bar-wrap"><div class="skill-bar amber" data-width="95"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Federal Court Testimony</span><span class="skill-pct">90%</span></div><div class="skill-bar-wrap"><div class="skill-bar amber" data-width="90"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Multi-Agency Coordination</span><span class="skill-pct">90%</span></div><div class="skill-bar-wrap"><div class="skill-bar amber" data-width="90"></div></div></div>
     </div>
 
     <div class="skill-group">
       <div class="skill-group-title">// CYBERSECURITY (DEVELOPING) //</div>
-      <div class="skill-item"><span class="skill-name">Threat Analysis</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Incident Response</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Network Fundamentals</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Security Operations</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
-      <div class="skill-item"><span class="skill-name">Fraud Detection</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Threat Analysis</span><span class="skill-pct">45%</span></div><div class="skill-bar-wrap"><div class="skill-bar dim" data-width="45"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Incident Response</span><span class="skill-pct">35%</span></div><div class="skill-bar-wrap"><div class="skill-bar dim" data-width="35"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Network Fundamentals</span><span class="skill-pct">30%</span></div><div class="skill-bar-wrap"><div class="skill-bar dim" data-width="30"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Security Operations</span><span class="skill-pct">35%</span></div><div class="skill-bar-wrap"><div class="skill-bar dim" data-width="35"></div></div></div>
+      <div class="skill-item"><div class="skill-top"><span class="skill-name">Fraud Detection</span><span class="skill-pct">75%</span></div><div class="skill-bar-wrap"><div class="skill-bar dim" data-width="75"></div></div></div>
     </div>
 
   </div>
@@ -563,6 +566,26 @@ function typeLine() {
     setTimeout(typeLine, lineIndex === bootLines.length - 1 ? 400 : 80);
   }
 }
+
+// ANIMATED SKILL BARS — trigger on scroll
+var skillsAnimated = false;
+function animateSkills() {
+  if (skillsAnimated) return;
+  var skillsSection = document.getElementById('skills');
+  if (!skillsSection) return;
+  var rect = skillsSection.getBoundingClientRect();
+  if (rect.top < window.innerHeight * 0.85) {
+    skillsAnimated = true;
+    document.querySelectorAll('.skill-bar').forEach(function(bar, i) {
+      var width = bar.getAttribute('data-width');
+      setTimeout(function() {
+        bar.style.width = width + '%';
+      }, i * 60);
+    });
+  }
+}
+window.addEventListener('scroll', animateSkills);
+animateSkills();
 
 // Smooth scroll nav
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
