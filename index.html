@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dakota Dennison // Cybersecurity</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --black: #080908;
+  --black2: #0c0e0c;
+  --black3: #111311;
+  --black4: #181a18;
+  --green: #00ff41;
+  --green2: rgba(0,255,65,0.12);
+  --green3: rgba(0,255,65,0.05);
+  --green4: rgba(0,255,65,0.4);
+  --dim: rgba(0,255,65,0.55);
+  --dimmer: rgba(0,255,65,0.25);
+  --dimmest: rgba(0,255,65,0.1);
+  --amber: #ffb700;
+  --amber2: rgba(255,183,0,0.12);
+  --red: #ff3b3b;
+  --red2: rgba(255,59,59,0.12);
+  --mono: 'Space Mono', monospace;
+  --display: 'Bebas Neue', sans-serif;
+  --body: 'DM Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { background: var(--black); color: var(--green); font-family: var(--mono); overflow-x: hidden; cursor: default; }
+
+/* SCANLINES */
+body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px); pointer-events: none; z-index: 1000; }
+
+/* NOISE TEXTURE */
+body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 999; opacity: 0.4; }
+
+/* BOOT SCREEN */
+#boot { position: fixed; inset: 0; background: var(--black); z-index: 9999; display: flex; flex-direction: column; justify-content: center; padding: 3rem; font-family: var(--mono); font-size: 13px; color: var(--dim); line-height: 2; overflow: hidden; }
+#boot-lines { max-width: 700px; }
+#boot-cursor { display: inline-block; width: 10px; height: 16px; background: var(--green); animation: blink 0.8s step-end infinite; vertical-align: middle; margin-left: 4px; }
+@keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0;} }
+#boot.fade-out { animation: bootFade 0.8s ease forwards; }
+@keyframes bootFade { to { opacity: 0; pointer-events: none; } }
+
+/* NAV */
+.nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(8,9,8,0.96); border-bottom: 1px solid var(--dimmest); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 52px; backdrop-filter: blur(8px); }
+.nav-id { font-size: 11px; letter-spacing: 0.2em; color: var(--dimmer); }
+.nav-id span { color: var(--green); }
+.nav-links { display: flex; gap: 2rem; }
+.nav-link { font-size: 10px; letter-spacing: 0.15em; color: var(--dimmer); text-decoration: none; transition: color 0.15s; }
+.nav-link:hover { color: var(--green); }
+.nav-status { font-size: 10px; color: var(--dimmer); letter-spacing: 0.12em; display: flex; align-items: center; gap: 6px; }
+.status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: statusPulse 2s ease-in-out infinite; }
+@keyframes statusPulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+/* HERO */
+.hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 7rem 2rem 4rem; position: relative; overflow: hidden; }
+.hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--dimmest) 1px, transparent 1px), linear-gradient(90deg, var(--dimmest) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.4; }
+.hero-glow { position: absolute; top: 20%; left: -10%; width: 60%; height: 60%; background: radial-gradient(ellipse, rgba(0,255,65,0.04) 0%, transparent 70%); pointer-events: none; }
+.hero-content { position: relative; z-index: 1; max-width: 1000px; }
+.hero-tag { font-size: 10px; letter-spacing: 0.4em; color: var(--dimmer); margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.75rem; }
+.hero-tag::before { content: ''; width: 40px; height: 1px; background: var(--dimmer); }
+.hero-name { font-family: var(--display); font-size: clamp(64px, 10vw, 140px); line-height: 0.9; letter-spacing: 0.02em; color: var(--green); margin-bottom: 0.5rem; text-shadow: 0 0 60px rgba(0,255,65,0.2); }
+.hero-name-dim { color: var(--dimmer); }
+.hero-title { font-size: clamp(12px, 1.5vw, 15px); letter-spacing: 0.3em; color: var(--dimmer); margin-bottom: 2.5rem; padding-left: 4px; }
+.hero-title span { color: var(--amber); }
+.hero-bio { font-family: var(--body); font-size: 16px; line-height: 1.8; color: rgba(0,255,65,0.6); max-width: 580px; margin-bottom: 3rem; font-weight: 300; }
+.hero-bio strong { color: var(--green); font-weight: 500; }
+.hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+.btn { font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; padding: 12px 28px; cursor: pointer; text-decoration: none; transition: all 0.2s; display: inline-flex; align-items: center; gap: 8px; }
+.btn-primary { background: var(--green); color: var(--black); border: 1px solid var(--green); font-weight: 700; }
+.btn-primary:hover { background: transparent; color: var(--green); }
+.btn-secondary { background: transparent; color: var(--dimmer); border: 1px solid var(--dimmest); }
+.btn-secondary:hover { border-color: var(--green); color: var(--green); }
+.hero-scroll { position: absolute; bottom: 2rem; left: 2rem; font-size: 9px; letter-spacing: 0.2em; color: var(--dimmest); display: flex; align-items: center; gap: 8px; }
+.hero-scroll::after { content: ''; width: 40px; height: 1px; background: var(--dimmest); }
+
+/* SECTION */
+.section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
+.section-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem; }
+.section-num { font-size: 10px; letter-spacing: 0.2em; color: var(--dimmer); }
+.section-title { font-family: var(--display); font-size: 48px; letter-spacing: 0.05em; color: var(--green); line-height: 1; }
+.section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--dimmest), transparent); }
+.section-divider { border: none; border-top: 1px solid var(--dimmest); margin: 0; }
+
+/* PROFILE GRID */
+.profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+.profile-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 1.5rem; position: relative; overflow: hidden; }
+.profile-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), transparent); }
+.profile-card-label { font-size: 9px; letter-spacing: 0.25em; color: var(--dimmer); margin-bottom: 0.75rem; }
+.profile-card-value { font-family: var(--body); font-size: 14px; color: var(--green); line-height: 1.7; font-weight: 300; }
+.profile-card-value strong { font-weight: 500; color: var(--green); font-family: var(--mono); }
+
+/* EXPERIENCE */
+.timeline { position: relative; padding-left: 2rem; }
+.timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--green), var(--dimmest), transparent); }
+.timeline-item { position: relative; margin-bottom: 3rem; }
+.timeline-item::before { content: ''; position: absolute; left: -2.35rem; top: 6px; width: 8px; height: 8px; background: var(--green); border: 2px solid var(--black); box-shadow: 0 0 10px rgba(0,255,65,0.5); }
+.timeline-meta { font-size: 9px; letter-spacing: 0.2em; color: var(--dimmer); margin-bottom: 0.4rem; }
+.timeline-role { font-family: var(--display); font-size: 28px; letter-spacing: 0.05em; color: var(--green); line-height: 1; margin-bottom: 3px; }
+.timeline-org { font-size: 11px; letter-spacing: 0.15em; color: var(--amber); margin-bottom: 1rem; }
+.timeline-desc { font-family: var(--body); font-size: 13px; line-height: 1.8; color: var(--dimmer); max-width: 700px; }
+.timeline-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 0.75rem; }
+.timeline-tag { font-size: 9px; letter-spacing: 0.1em; padding: 2px 8px; border: 1px solid var(--dimmest); color: var(--dimmer); }
+
+/* CERTS */
+.certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
+.cert-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 1.25rem; position: relative; overflow: hidden; transition: all 0.2s; }
+.cert-card:hover { border-color: var(--green4); background: var(--black3); }
+.cert-card::after { content: ''; position: absolute; top: 0; right: 0; width: 0; height: 0; border-style: solid; border-width: 0 20px 20px 0; border-color: transparent var(--dimmest) transparent transparent; }
+.cert-card.active::after { border-color: transparent var(--green) transparent transparent; }
+.cert-status { font-size: 8px; letter-spacing: 0.2em; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 6px; }
+.cert-status.pending { color: var(--amber); }
+.cert-status.active { color: var(--green); }
+.cert-status-dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+.cert-status.pending .cert-status-dot { background: var(--amber); animation: statusPulse 1.5s ease-in-out infinite; }
+.cert-status.active .cert-status-dot { background: var(--green); }
+.cert-org { font-size: 9px; letter-spacing: 0.15em; color: var(--dimmer); margin-bottom: 4px; }
+.cert-name { font-family: var(--display); font-size: 22px; letter-spacing: 0.03em; color: var(--green); line-height: 1.1; margin-bottom: 0.75rem; }
+.cert-bar-wrap { height: 2px; background: var(--dimmest); margin-bottom: 4px; }
+.cert-bar { height: 2px; background: linear-gradient(90deg, var(--green), var(--amber)); }
+.cert-bar-label { font-size: 8px; letter-spacing: 0.1em; color: var(--dimmer); }
+
+/* SKILLS */
+.skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+.skill-group { }
+.skill-group-title { font-size: 9px; letter-spacing: 0.25em; color: var(--amber); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dimmest); }
+.skill-item { display: flex; align-items: center; justify-content: space-between; padding: 6px 0; border-bottom: 1px solid rgba(0,255,65,0.04); }
+.skill-name { font-family: var(--body); font-size: 13px; color: var(--dim); font-weight: 300; }
+.skill-level { display: flex; gap: 3px; }
+.skill-pip { width: 8px; height: 8px; border: 1px solid var(--dimmest); }
+.skill-pip.filled { background: var(--green); border-color: var(--green); box-shadow: 0 0 4px rgba(0,255,65,0.4); }
+
+/* EDUCATION */
+.edu-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 2rem; position: relative; overflow: hidden; max-width: 700px; }
+.edu-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--amber), var(--green), transparent); }
+.edu-tag { font-size: 9px; letter-spacing: 0.25em; color: var(--amber); margin-bottom: 0.5rem; }
+.edu-school { font-family: var(--display); font-size: 36px; letter-spacing: 0.03em; color: var(--green); line-height: 1; margin-bottom: 6px; }
+.edu-degree { font-size: 11px; letter-spacing: 0.1em; color: var(--dimmer); margin-bottom: 1rem; }
+.edu-note { font-family: var(--body); font-size: 12px; color: var(--dimmer); line-height: 1.7; }
+
+/* CONTACT */
+.contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
+.contact-info { }
+.contact-line { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
+.contact-line-label { font-size: 9px; letter-spacing: 0.2em; color: var(--dimmer); width: 80px; flex-shrink: 0; padding-top: 2px; }
+.contact-line-value { font-family: var(--body); font-size: 14px; color: var(--green); line-height: 1.5; }
+.contact-line-value a { color: var(--green); text-decoration: none; }
+.contact-line-value a:hover { text-decoration: underline; }
+.contact-form { background: var(--black2); border: 1px solid var(--dimmest); padding: 1.5rem; }
+.form-row { margin-bottom: 1rem; }
+.form-label { font-size: 9px; letter-spacing: 0.2em; color: var(--dimmer); display: block; margin-bottom: 6px; }
+.form-input { width: 100%; background: var(--black); border: 1px solid var(--dimmest); color: var(--green); font-family: var(--mono); font-size: 12px; padding: 8px 10px; outline: none; transition: border-color 0.15s; letter-spacing: 0.05em; }
+.form-input:focus { border-color: var(--green4); }
+.form-input::placeholder { color: var(--dimmest); }
+textarea.form-input { min-height: 100px; resize: vertical; }
+.form-submit { width: 100%; padding: 12px; background: var(--green); color: var(--black); border: none; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.25em; cursor: pointer; transition: all 0.2s; }
+.form-submit:hover { background: transparent; color: var(--green); border: 1px solid var(--green); }
+
+/* FOOTER */
+.footer { border-top: 1px solid var(--dimmest); padding: 2rem; text-align: center; font-size: 9px; letter-spacing: 0.2em; color: var(--dimmest); }
+
+/* MOBILE */
+@media (max-width: 768px) {
+  .nav-links { display: none; }
+  .profile-grid { grid-template-columns: 1fr; }
+  .contact-wrap { grid-template-columns: 1fr; }
+  .hero-name { font-size: clamp(48px, 14vw, 90px); }
+  .section { padding: 4rem 1.25rem; }
+  .skills-grid { grid-template-columns: 1fr; }
+}
+
+/* GLITCH EFFECT ON NAME */
+.hero-name { position: relative; }
+.hero-name::after { content: attr(data-text); position: absolute; left: 2px; top: 0; color: var(--red); opacity: 0; clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%); animation: glitch 8s infinite; }
+@keyframes glitch { 0%,94%,100%{opacity:0;} 95%{opacity:0.3;transform:translateX(-3px);} 97%{opacity:0;} 98%{opacity:0.2;transform:translateX(3px);} 99%{opacity:0;} }
+</style>
+</head>
+<body>
+
+<!-- BOOT SEQUENCE -->
+<div id="boot">
+  <div id="boot-lines"></div>
+  <span id="boot-cursor"></span>
+</div>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-id">ID: <span>DENNISON_D // CYBER-OPS</span></div>
+  <div class="nav-links">
+    <a href="#about" class="nav-link">PROFILE</a>
+    <a href="#experience" class="nav-link">EXPERIENCE</a>
+    <a href="#certifications" class="nav-link">CERTS</a>
+    <a href="#skills" class="nav-link">SKILLS</a>
+    <a href="#contact" class="nav-link">CONTACT</a>
+  </div>
+  <div class="nav-status"><div class="status-dot"></div>AVAILABLE FOR HIRE</div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-content">
+    <div class="hero-tag">CYBERSECURITY PROFESSIONAL // WEST VIRGINIA, USA</div>
+    <div class="hero-name" data-text="DAKOTA DENNISON">
+      <span class="hero-name-dim">DAKOTA</span><br>DENNISON
+    </div>
+    <div class="hero-title">SOC ANALYST · <span>CYBER INVESTIGATOR</span> · THREAT INTELLIGENCE</div>
+    <p class="hero-bio">
+      <strong>U.S. Marine veteran. Former Law Enforcement Detective.</strong> 10+ years conducting complex criminal investigations including digital evidence collection, electronic surveillance, wiretap operations, and HIDTA task force work.<br><br>
+      Now transitioning into cybersecurity — currently enrolled at <strong>Western Governors University</strong> pursuing a B.S. in Cybersecurity & Information Assurance and working toward industry certifications. Building technical skills to complement an investigative background most analysts don't have.
+    </p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-primary">→ CONTACT ME</a>
+      <a href="https://linkedin.com/in/dakotadennison" target="_blank" class="btn btn-secondary">↗ LINKEDIN</a>
+    </div>
+  </div>
+  <div class="hero-scroll">SCROLL TO EXPLORE</div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ABOUT -->
+<section class="section" id="about">
+  <div class="section-header">
+    <span class="section-num">01</span>
+    <div class="section-title">PROFILE</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="profile-grid">
+    <div class="profile-card">
+      <div class="profile-card-label">// WHERE I'VE BEEN //</div>
+      <div class="profile-card-value">
+        U.S. Marine. Patrol Officer. Narcotics Detective. AG Investigator. Kanawha County Detective. <strong>10+ years</strong> working complex felony cases, federal investigations, and multi-agency operations from start to finish.
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-card-label">// WHERE I'M GOING //</div>
+      <div class="profile-card-value">
+        Currently enrolled at <strong>WGU pursuing a B.S. in Cybersecurity</strong> and working toward my first certifications. Targeting roles where investigative experience is an asset — SOC analysis, cyber investigations, threat intelligence, and fraud detection.
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-card-label">// WHY CYBERSECURITY //</div>
+      <div class="profile-card-value">
+        Digital evidence, electronic surveillance, wiretap authorizations, OSINT, HIPAA compliance, chain of custody — I've been doing the analog version of cybersecurity work for a decade. <strong>The transition is a natural one.</strong>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-card-label">// TARGET ROLES //</div>
+      <div class="profile-card-value">
+        <strong>SOC Analyst</strong> · <strong>Cyber Investigator</strong> · <strong>Threat Intelligence Analyst</strong> · <strong>Fraud Detection Specialist</strong> · <strong>Incident Responder</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- EXPERIENCE -->
+<section class="section" id="experience">
+  <div class="section-header">
+    <span class="section-num">02</span>
+    <div class="section-title">EXPERIENCE</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="timeline">
+
+    <div class="timeline-item">
+      <div class="timeline-meta">JUN 2023 — MAY 2026 · 3 YRS</div>
+      <div class="timeline-role">DETECTIVE</div>
+      <div class="timeline-org">KANAWHA COUNTY SHERIFF'S OFFICE // CRIMINAL INVESTIGATIVE SECTION</div>
+      <div class="timeline-desc">Investigated felony cases ranging from violent crimes to financial and property offenses. Processed scenes, conducted interviews, drafted affidavits and warrants, and prepared cases for prosecution. Gained extensive experience handling digital evidence, electronic data analysis, and technology-driven investigations — skills directly applicable to cybersecurity operations, incident response, and threat analysis.</div>
+      <div class="timeline-tags">
+        <span class="timeline-tag">DIGITAL EVIDENCE</span>
+        <span class="timeline-tag">ELECTRONIC SURVEILLANCE</span>
+        <span class="timeline-tag">AFFIDAVIT PREPARATION</span>
+        <span class="timeline-tag">THREAT ANALYSIS</span>
+        <span class="timeline-tag">INCIDENT DOCUMENTATION</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">JAN 2023 — JUN 2023 · 6 MOS</div>
+      <div class="timeline-role">INVESTIGATOR</div>
+      <div class="timeline-org">WV ATTORNEY GENERAL'S OFFICE</div>
+      <div class="timeline-desc">Investigated Medicaid fraud, criminal abuse, neglect, and financial exploitation involving healthcare facilities. Coordinated with law enforcement and regulatory agencies, compiled evidence for criminal prosecution and civil recovery. Operated under HIPAA and privacy guidelines during sensitive investigations involving vulnerable populations.</div>
+      <div class="timeline-tags">
+        <span class="timeline-tag">FRAUD ANALYSIS</span>
+        <span class="timeline-tag">HIPAA COMPLIANCE</span>
+        <span class="timeline-tag">MULTI-AGENCY COORDINATION</span>
+        <span class="timeline-tag">FINANCIAL CRIMES</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">JUL 2015 — DEC 2022 · 7 YRS 6 MOS</div>
+      <div class="timeline-role">NARCOTICS DETECTIVE / PATROL OFFICER</div>
+      <div class="timeline-org">SOUTH CHARLESTON POLICE DEPARTMENT</div>
+      <div class="timeline-desc">Conducted surveillance, executed search warrants, and coordinated with federal and state partners on joint operations. Drafted detailed investigative reports, affidavits, and supporting documentation for arrests, search warrants, and court proceedings including wiretap authorizations. Collaborated with HIDTA task force operations targeting drug distribution networks.</div>
+      <div class="timeline-tags">
+        <span class="timeline-tag">WIRETAP INVESTIGATIONS</span>
+        <span class="timeline-tag">HIDTA TASK FORCE</span>
+        <span class="timeline-tag">SURVEILLANCE OPS</span>
+        <span class="timeline-tag">FEDERAL COURT TESTIMONY</span>
+        <span class="timeline-tag">OSINT</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">MAY 2017 — DEC 2020 · 3 YRS 8 MOS</div>
+      <div class="timeline-role">AUTOMATED LOGISTICAL SPECIALIST</div>
+      <div class="timeline-org">US ARMY RESERVES // MOS 92A</div>
+      <div class="timeline-desc">Managed and tracked military equipment using SAMS and GCSS-Army systems. Conducted inventory control, logistics coordination, and warehouse operations. Supported joint operations with USMC, Navy, and Air Force.</div>
+      <div class="timeline-tags">
+        <span class="timeline-tag">SYSTEMS MANAGEMENT</span>
+        <span class="timeline-tag">JOINT OPERATIONS</span>
+        <span class="timeline-tag">DOCUMENTATION</span>
+      </div>
+    </div>
+
+    <div class="timeline-item">
+      <div class="timeline-meta">MAY 2010 — MAY 2014 · 4 YRS</div>
+      <div class="timeline-role">INFANTRY // 60MM MORTARMAN</div>
+      <div class="timeline-org">UNITED STATES MARINE CORPS // MOS 0341</div>
+      <div class="timeline-desc">Served as a 60mm Mortarman within a weapons platoon, specializing in indirect fire support, target acquisition, and rapid mortar system deployment. Operated in high-pressure field conditions requiring precision, discipline, and mission focus.</div>
+      <div class="timeline-tags">
+        <span class="timeline-tag">USMC VETERAN</span>
+        <span class="timeline-tag">TACTICAL OPERATIONS</span>
+        <span class="timeline-tag">TARGET ACQUISITION</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CERTIFICATIONS -->
+<section class="section" id="certifications">
+  <div class="section-header">
+    <span class="section-num">03</span>
+    <div class="section-title">CERTIFICATIONS</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="certs-grid">
+
+    <div class="cert-card">
+      <div class="cert-status pending"><div class="cert-status-dot"></div>IN PROGRESS</div>
+      <div class="cert-org">ISC²</div>
+      <div class="cert-name">CERTIFIED IN CYBERSECURITY</div>
+      <div class="cert-bar-wrap"><div class="cert-bar" style="width:25%"></div></div>
+      <div class="cert-bar-label">PURSUING // TARGET: 2025</div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-status pending"><div class="cert-status-dot"></div>QUEUED</div>
+      <div class="cert-org">COMPTIA</div>
+      <div class="cert-name">CYBERSECURITY ANALYST CySA+</div>
+      <div class="cert-bar-wrap"><div class="cert-bar" style="width:5%"></div></div>
+      <div class="cert-bar-label">PLANNED // TARGET: 2025</div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-status pending"><div class="cert-status-dot"></div>QUEUED</div>
+      <div class="cert-org">COMPTIA</div>
+      <div class="cert-name">PENTEST+</div>
+      <div class="cert-bar-wrap"><div class="cert-bar" style="width:5%"></div></div>
+      <div class="cert-bar-label">PLANNED // TARGET: 2026</div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-status pending"><div class="cert-status-dot"></div>OPTIONAL</div>
+      <div class="cert-org">COMPTIA</div>
+      <div class="cert-name">CASP+</div>
+      <div class="cert-bar-wrap"><div class="cert-bar" style="width:0%"></div></div>
+      <div class="cert-bar-label">ADVANCED // UNDER CONSIDERATION</div>
+    </div>
+
+    <div class="cert-card">
+      <div class="cert-status pending"><div class="cert-status-dot"></div>OPTIONAL</div>
+      <div class="cert-org">ISACA</div>
+      <div class="cert-name">CISM</div>
+      <div class="cert-bar-wrap"><div class="cert-bar" style="width:0%"></div></div>
+      <div class="cert-bar-label">MANAGEMENT TRACK // UNDER CONSIDERATION</div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- SKILLS -->
+<section class="section" id="skills">
+  <div class="section-header">
+    <span class="section-num">04</span>
+    <div class="section-title">SKILLS</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="skills-grid">
+
+    <div class="skill-group">
+      <div class="skill-group-title">// INVESTIGATIONS & INTELLIGENCE //</div>
+      <div class="skill-item"><span class="skill-name">Criminal Investigations</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+      <div class="skill-item"><span class="skill-name">OSINT</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Digital Evidence Analysis</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Intelligence Analysis</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Surveillance Operations</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">// LEGAL & COMPLIANCE //</div>
+      <div class="skill-item"><span class="skill-name">Chain of Custody</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+      <div class="skill-item"><span class="skill-name">HIPAA Compliance</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Warrant & Affidavit Prep</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Federal Court Testimony</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Multi-Agency Coordination</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div></div></div>
+    </div>
+
+    <div class="skill-group">
+      <div class="skill-group-title">// CYBERSECURITY (DEVELOPING) //</div>
+      <div class="skill-item"><span class="skill-name">Threat Analysis</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Incident Response</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Network Fundamentals</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Security Operations</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div><div class="skill-pip"></div><div class="skill-pip"></div></div></div>
+      <div class="skill-item"><span class="skill-name">Fraud Detection</span><div class="skill-level"><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip filled"></div><div class="skill-pip"></div></div></div>
+    </div>
+
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- EDUCATION -->
+<section class="section" id="education">
+  <div class="section-header">
+    <span class="section-num">05</span>
+    <div class="section-title">EDUCATION</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="edu-card">
+    <div class="edu-tag">// CURRENTLY ENROLLED //</div>
+    <div class="edu-school">WESTERN GOVERNORS UNIVERSITY</div>
+    <div class="edu-degree">B.S. CYBERSECURITY & INFORMATION ASSURANCE // IN PROGRESS</div>
+    <div class="edu-note">WGU's cybersecurity program is built around industry certifications — graduates earn 10+ recognized credentials as part of the degree. The curriculum aligns directly with NICE Cybersecurity Workforce Framework and prepares students for SOC, threat intelligence, and security engineering roles.</div>
+  </div>
+  <div class="edu-card" style="margin-top:1rem;">
+    <div class="edu-tag">// COMPLETED //</div>
+    <div class="edu-school">FULL SAIL UNIVERSITY</div>
+    <div class="edu-degree">CERTIFICATE IN INFORMATION TECHNOLOGY // AWARDED</div>
+    <div class="edu-note">Completed a focused information technology certificate program covering foundational IT concepts, systems, and technical skills — establishing the technical foundation for a career in cybersecurity.</div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- CONTACT -->
+<section class="section" id="contact">
+  <div class="section-header">
+    <span class="section-num">06</span>
+    <div class="section-title">CONTACT</div>
+    <div class="section-line"></div>
+  </div>
+  <div class="contact-wrap">
+    <div class="contact-info">
+      <div class="contact-line">
+        <div class="contact-line-label">LOCATION</div>
+        <div class="contact-line-value">West Virginia, USA</div>
+      </div>
+      <div class="contact-line">
+        <div class="contact-line-label">LINKEDIN</div>
+        <div class="contact-line-value"><a href="https://linkedin.com/in/dakotadennison" target="_blank">linkedin.com/in/dakotadennison</a></div>
+      </div>
+      <div class="contact-line">
+        <div class="contact-line-label">STATUS</div>
+        <div class="contact-line-value">Open to opportunities in SOC Analysis, Cyber Investigation, and Threat Intelligence</div>
+      </div>
+      <div class="contact-line">
+        <div class="contact-line-label">CLEARANCE</div>
+        <div class="contact-line-value">Law enforcement background — eligible for security clearance consideration</div>
+      </div>
+    </div>
+    <div class="contact-form">
+      <form action="https://formspree.io/f/xojbdjbq" method="POST">
+        <div class="form-row">
+          <label class="form-label">// SENDER //</label>
+          <input type="text" name="name" class="form-input" placeholder="Your name" required>
+        </div>
+        <div class="form-row">
+          <label class="form-label">// ORGANIZATION //</label>
+          <input type="text" name="org" class="form-input" placeholder="Company or agency">
+        </div>
+        <div class="form-row">
+          <label class="form-label">// RETURN ADDRESS //</label>
+          <input type="email" name="email" class="form-input" placeholder="your@email.com" required>
+        </div>
+        <div class="form-row">
+          <label class="form-label">// MESSAGE //</label>
+          <textarea name="message" class="form-input" placeholder="Describe the opportunity or inquiry..." required></textarea>
+        </div>
+        <button type="submit" class="form-submit">⟶ TRANSMIT MESSAGE</button>
+      </form>
+    </div>
+  </div>
+</section>
+
+<div class="footer">
+  DAKOTA DENNISON // CYBERSECURITY PROFESSIONAL // WEST VIRGINIA, USA // <span id="year"></span>
+</div>
+
+<script>
+document.getElementById('year').textContent = new Date().getFullYear();
+
+// BOOT SEQUENCE
+var bootLines = [
+  'INITIALIZING SECURE CONNECTION...',
+  'VERIFYING IDENTITY CREDENTIALS...',
+  'LOADING OPERATOR PROFILE: DENNISON_D',
+  'CLEARANCE LEVEL: ██████████ PASSED',
+  'BACKGROUND CHECK: ██████████ PASSED',
+  'EXPERIENCE: 10+ YEARS VERIFIED',
+  'LOADING PROFILE DATA...',
+  '.',
+  '..',
+  '...',
+  'ACCESS GRANTED. WELCOME.',
+];
+
+var boot = document.getElementById('boot');
+var bootLinesEl = document.getElementById('boot-lines');
+var lineIndex = 0;
+var charIndex = 0;
+var currentLine = '';
+var lineEl = null;
+
+function typeLine() {
+  if (lineIndex >= bootLines.length) {
+    setTimeout(function() {
+      boot.classList.add('fade-out');
+      setTimeout(function(){ boot.style.display = 'none'; }, 800);
+    }, 600);
+    return;
+  }
+
+  var text = bootLines[lineIndex];
+  if (charIndex === 0) {
+    lineEl = document.createElement('div');
+    lineEl.style.color = lineIndex === bootLines.length - 1 ? 'var(--green)' : 'var(--dimmer)';
+    bootLinesEl.appendChild(lineEl);
+  }
+
+  if (charIndex < text.length) {
+    lineEl.textContent += text[charIndex];
+    charIndex++;
+    setTimeout(typeLine, text === '.' || text === '..' || text === '...' ? 200 : 18);
+  } else {
+    lineIndex++;
+    charIndex = 0;
+    setTimeout(typeLine, lineIndex === bootLines.length - 1 ? 400 : 80);
+  }
+}
+
+// Smooth scroll nav
+document.querySelectorAll('a[href^="#"]').forEach(function(a) {
+  a.addEventListener('click', function(e) {
+    e.preventDefault();
+    var target = document.querySelector(this.getAttribute('href'));
+    if (target) target.scrollIntoView({ behavior: 'smooth' });
+  });
+});
+
+setTimeout(typeLine, 300);
+</script>
+</body>
+</html>
