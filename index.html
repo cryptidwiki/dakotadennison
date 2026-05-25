@@ -31,13 +31,10 @@
 html { scroll-behavior: smooth; }
 body { background: var(--black); color: var(--green); font-family: var(--mono); overflow-x: hidden; cursor: default; }
 
-/* SCANLINES */
 body::before { content: ''; position: fixed; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.08) 2px, rgba(0,0,0,0.08) 4px); pointer-events: none; z-index: 1000; }
 
-/* NOISE TEXTURE */
 body::after { content: ''; position: fixed; inset: 0; background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.03'/%3E%3C/svg%3E"); pointer-events: none; z-index: 999; opacity: 0.4; }
 
-/* BOOT SCREEN */
 #boot { position: fixed; inset: 0; background: var(--black); z-index: 9999; display: flex; flex-direction: column; justify-content: center; padding: 3rem; font-family: var(--mono); font-size: 13px; color: var(--dim); line-height: 2; overflow: hidden; }
 #boot-lines { max-width: 700px; }
 #boot-cursor { display: inline-block; width: 10px; height: 16px; background: var(--green); animation: blink 0.8s step-end infinite; vertical-align: middle; margin-left: 4px; }
@@ -45,7 +42,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 #boot.fade-out { animation: bootFade 0.8s ease forwards; }
 @keyframes bootFade { to { opacity: 0; pointer-events: none; } }
 
-/* NAV */
 .nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; background: rgba(8,9,8,0.96); border-bottom: 1px solid var(--dimmest); padding: 0 2rem; display: flex; align-items: center; justify-content: space-between; height: 52px; backdrop-filter: blur(8px); }
 .nav-id { font-size: 11px; letter-spacing: 0.2em; color: var(--dimmer); }
 .nav-id span { color: var(--green); }
@@ -56,7 +52,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: statusPulse 2s ease-in-out infinite; }
 @keyframes statusPulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
 
-/* HERO */
 .hero { min-height: 100vh; display: flex; flex-direction: column; justify-content: center; padding: 7rem 2rem 4rem; position: relative; overflow: hidden; }
 .hero-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--dimmest) 1px, transparent 1px), linear-gradient(90deg, var(--dimmest) 1px, transparent 1px); background-size: 60px 60px; opacity: 0.4; }
 .hero-glow { position: absolute; top: 20%; left: -10%; width: 60%; height: 60%; background: radial-gradient(ellipse, rgba(0,255,65,0.04) 0%, transparent 70%); pointer-events: none; }
@@ -78,7 +73,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .hero-scroll { position: absolute; bottom: 2rem; left: 2rem; font-size: 9px; letter-spacing: 0.2em; color: var(--dimmest); display: flex; align-items: center; gap: 8px; }
 .hero-scroll::after { content: ''; width: 40px; height: 1px; background: var(--dimmest); }
 
-/* SECTION */
 .section { padding: 6rem 2rem; max-width: 1100px; margin: 0 auto; }
 .section-header { display: flex; align-items: center; gap: 1.5rem; margin-bottom: 3rem; }
 .section-num { font-size: 10px; letter-spacing: 0.2em; color: var(--dimmer); }
@@ -86,7 +80,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .section-line { flex: 1; height: 1px; background: linear-gradient(90deg, var(--dimmest), transparent); }
 .section-divider { border: none; border-top: 1px solid var(--dimmest); margin: 0; }
 
-/* PROFILE GRID */
 .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
 .profile-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 1.5rem; position: relative; overflow: hidden; }
 .profile-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--green), transparent); }
@@ -94,7 +87,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .profile-card-value { font-family: var(--body); font-size: 14px; color: var(--green); line-height: 1.7; font-weight: 300; }
 .profile-card-value strong { font-weight: 500; color: var(--green); font-family: var(--mono); }
 
-/* EXPERIENCE */
 .timeline { position: relative; padding-left: 2rem; }
 .timeline::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 1px; background: linear-gradient(to bottom, var(--green), var(--dimmest), transparent); }
 .timeline-item { position: relative; margin-bottom: 3rem; }
@@ -106,7 +98,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .timeline-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 0.75rem; }
 .timeline-tag { font-size: 9px; letter-spacing: 0.1em; padding: 2px 8px; border: 1px solid var(--dimmest); color: var(--dimmer); }
 
-/* CERTS */
 .certs-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1rem; }
 .cert-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 1.25rem; position: relative; overflow: hidden; transition: all 0.2s; }
 .cert-card:hover { border-color: var(--green4); background: var(--black3); }
@@ -124,7 +115,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .cert-bar { height: 2px; background: linear-gradient(90deg, var(--green), var(--amber)); }
 .cert-bar-label { font-size: 8px; letter-spacing: 0.1em; color: var(--dimmer); }
 
-/* SKILLS */
 .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
 .skill-group-title { font-size: 9px; letter-spacing: 0.25em; color: var(--amber); margin-bottom: 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--dimmest); }
 .skill-item { padding: 8px 0; border-bottom: 1px solid rgba(0,255,65,0.04); }
@@ -137,7 +127,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .skill-bar.amber { background: linear-gradient(90deg, var(--amber), rgba(255,183,0,0.5)); box-shadow: 0 0 8px rgba(255,183,0,0.3); }
 .skill-bar.dim { background: linear-gradient(90deg, var(--dimmer), rgba(0,255,65,0.2)); }
 
-/* EDUCATION */
 .edu-card { background: var(--black2); border: 1px solid var(--dimmest); padding: 2rem; position: relative; overflow: hidden; max-width: 700px; }
 .edu-card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, var(--amber), var(--green), transparent); }
 .edu-tag { font-size: 9px; letter-spacing: 0.25em; color: var(--amber); margin-bottom: 0.5rem; }
@@ -145,7 +134,6 @@ body::after { content: ''; position: fixed; inset: 0; background-image: url("dat
 .edu-degree { font-size: 11px; letter-spacing: 0.1em; color: var(--dimmer); margin-bottom: 1rem; }
 .edu-note { font-family: var(--body); font-size: 12px; color: var(--dimmer); line-height: 1.7; }
 
-/* CONTACT */
 .contact-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: start; }
 .contact-info { }
 .contact-line { display: flex; align-items: flex-start; gap: 1rem; margin-bottom: 1.5rem; }
@@ -163,10 +151,8 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 .form-submit { width: 100%; padding: 12px; background: var(--green); color: var(--black); border: none; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.25em; cursor: pointer; transition: all 0.2s; }
 .form-submit:hover { background: transparent; color: var(--green); border: 1px solid var(--green); }
 
-/* FOOTER */
 .footer { border-top: 1px solid var(--dimmest); padding: 2rem; text-align: center; font-size: 9px; letter-spacing: 0.2em; color: var(--dimmest); }
 
-/* MOBILE */
 @media (max-width: 768px) {
   .nav-links { display: none; }
   .profile-grid { grid-template-columns: 1fr; }
@@ -176,7 +162,6 @@ textarea.form-input { min-height: 100px; resize: vertical; }
   .skills-grid { grid-template-columns: 1fr; }
 }
 
-/* GLITCH EFFECT ON NAME */
 .hero-name { position: relative; }
 .hero-name::after { content: attr(data-text); position: absolute; left: 2px; top: 0; color: var(--red); opacity: 0; clip-path: polygon(0 30%, 100% 30%, 100% 50%, 0 50%); animation: glitch 8s infinite; }
 @keyframes glitch { 0%,94%,100%{opacity:0;} 95%{opacity:0.3;transform:translateX(-3px);} 97%{opacity:0;} 98%{opacity:0.2;transform:translateX(3px);} 99%{opacity:0;} }
@@ -184,26 +169,24 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 </head>
 <body>
 
-<!-- BOOT SEQUENCE -->
 <div id="boot">
   <div id="boot-lines"></div>
   <span id="boot-cursor"></span>
 </div>
 
-<!-- NAV -->
 <nav class="nav">
   <div class="nav-id">ID: <span>DENNISON_D // CYBER-OPS</span></div>
   <div class="nav-links">
     <a href="#about" class="nav-link">PROFILE</a>
     <a href="#experience" class="nav-link">EXPERIENCE</a>
     <a href="#certifications" class="nav-link">CERTS</a>
+    <a href="#cyber-ops" class="nav-link">CYBER-OPS</a>
     <a href="#skills" class="nav-link">SKILLS</a>
     <a href="#contact" class="nav-link">CONTACT</a>
   </div>
   <div class="nav-status"><div class="status-dot"></div>AVAILABLE FOR HIRE</div>
 </nav>
 
-<!-- HERO -->
 <section class="hero">
   <div class="hero-grid"></div>
   <div class="hero-glow"></div>
@@ -227,7 +210,6 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 <hr class="section-divider">
 
-<!-- ABOUT -->
 <section class="section" id="about">
   <div class="section-header">
     <span class="section-num">01</span>
@@ -264,7 +246,6 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 <hr class="section-divider">
 
-<!-- EXPERIENCE -->
 <section class="section" id="experience">
   <div class="section-header">
     <span class="section-num">02</span>
@@ -343,7 +324,6 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 <hr class="section-divider">
 
-<!-- CERTIFICATIONS -->
 <section class="section" id="certifications">
   <div class="section-header">
     <span class="section-num">03</span>
@@ -397,10 +377,40 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 <hr class="section-divider">
 
-<!-- SKILLS -->
-<section class="section" id="skills">
+<section class="section" id="cyber-ops">
   <div class="section-header">
     <span class="section-num">04</span>
+    <div class="section-title">CYBER-OPS</div>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="profile-card" style="max-width: 800px; padding: 2rem;">
+    <div class="profile-card-label">// FIELD TOOL // PASSWORD BREACH CHECK</div>
+    <div class="profile-card-value" style="margin-bottom: 1.5rem;">
+      Live tool. Checks a password against the <strong>HaveIBeenPwned</strong> breach database using <strong>k-anonymity</strong> — the password is hashed with SHA-1 locally and only the first 5 characters of the hash are sent to the API. <strong>The plaintext never leaves your browser.</strong>
+    </div>
+
+    <label class="form-label" style="margin-bottom: 8px;">// PASSWORD //</label>
+    <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+      <input type="password" id="pbc-pw" class="form-input" placeholder="enter a test password" autocomplete="off" style="flex: 1;">
+      <button id="pbc-go" class="btn btn-primary" style="padding: 0 24px;">SCAN</button>
+    </div>
+
+    <div id="pbc-out" style="min-height: 60px; padding: 14px 16px; border: 1px solid var(--dimmest); background: var(--green3); font-size: 12px; line-height: 1.7; letter-spacing: 0.04em; font-family: var(--mono);">
+      <span style="color: var(--dim);">// AWAITING INPUT</span>
+    </div>
+
+    <div style="font-size: 9px; letter-spacing: 0.15em; color: var(--dimmest); margin-top: 12px; line-height: 1.6;">
+      DO NOT enter passwords you actually use. This is a demonstration of cybersecurity tooling.
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<section class="section" id="skills">
+  <div class="section-header">
+    <span class="section-num">05</span>
     <div class="section-title">SKILLS</div>
     <div class="section-line"></div>
   </div>
@@ -438,10 +448,9 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 <hr class="section-divider">
 
-<!-- EDUCATION -->
 <section class="section" id="education">
   <div class="section-header">
-    <span class="section-num">05</span>
+    <span class="section-num">06</span>
     <div class="section-title">EDUCATION</div>
     <div class="section-line"></div>
   </div>
@@ -461,10 +470,9 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 
 <hr class="section-divider">
 
-<!-- CONTACT -->
 <section class="section" id="contact">
   <div class="section-header">
-    <span class="section-num">06</span>
+    <span class="section-num">07</span>
     <div class="section-title">CONTACT</div>
     <div class="section-line"></div>
   </div>
@@ -518,7 +526,6 @@ textarea.form-input { min-height: 100px; resize: vertical; }
 <script>
 document.getElementById('year').textContent = new Date().getFullYear();
 
-// BOOT SEQUENCE
 var bootLines = [
   'INITIALIZING SECURE CONNECTION...',
   'VERIFYING IDENTITY CREDENTIALS...',
@@ -567,7 +574,6 @@ function typeLine() {
   }
 }
 
-// ANIMATED SKILL BARS — trigger on scroll
 var skillsAnimated = false;
 function animateSkills() {
   if (skillsAnimated) return;
@@ -587,7 +593,6 @@ function animateSkills() {
 window.addEventListener('scroll', animateSkills);
 animateSkills();
 
-// Smooth scroll nav
 document.querySelectorAll('a[href^="#"]').forEach(function(a) {
   a.addEventListener('click', function(e) {
     e.preventDefault();
@@ -597,6 +602,64 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a) {
 });
 
 setTimeout(typeLine, 300);
+
+// ===== PASSWORD BREACH CHECKER =====
+(function() {
+  const pw = document.getElementById('pbc-pw');
+  const btn = document.getElementById('pbc-go');
+  const out = document.getElementById('pbc-out');
+  if (!pw || !btn || !out) return;
+
+  async function sha1(str) {
+    const buf = new TextEncoder().encode(str);
+    const hash = await crypto.subtle.digest('SHA-1', buf);
+    return Array.from(new Uint8Array(hash))
+      .map(b => b.toString(16).padStart(2, '0'))
+      .join('').toUpperCase();
+  }
+
+  async function check() {
+    const value = pw.value;
+    if (!value) {
+      out.innerHTML = '<span style="color: var(--amber);">// EMPTY INPUT — TRY AGAIN</span>';
+      return;
+    }
+
+    out.innerHTML = '<span style="color: var(--dim);">// HASHING LOCALLY...</span>';
+
+    try {
+      const hash = await sha1(value);
+      const prefix = hash.slice(0, 5);
+      const suffix = hash.slice(5);
+
+      out.innerHTML = '<span style="color: var(--dim);">// QUERYING HIBP RANGE API...</span>';
+      const res = await fetch('https://api.pwnedpasswords.com/range/' + prefix);
+      const text = await res.text();
+      const lines = text.split('\n');
+      let count = 0;
+      for (const line of lines) {
+        const [sfx, c] = line.trim().split(':');
+        if (sfx === suffix) {
+          count = parseInt(c, 10);
+          break;
+        }
+      }
+
+      if (count > 0) {
+        out.innerHTML = '<span style="color: var(--red);">⚠ COMPROMISED // FOUND IN ' + count.toLocaleString() + ' BREACHES</span><br><span style="color: var(--dim); font-size: 10px;">// PARTIAL HASH: ' + prefix + '... | TIME TO RETIRE THIS PASSWORD</span>';
+      } else {
+        out.innerHTML = '<span style="color: var(--green);">✓ NOT FOUND IN ANY KNOWN BREACH</span><br><span style="color: var(--dim); font-size: 10px;">// PARTIAL HASH: ' + prefix + '... | DOES NOT GUARANTEE STRENGTH</span>';
+      }
+    } catch (err) {
+      out.innerHTML = '<span style="color: var(--red);">// ERROR: ' + err.message + '</span>';
+    }
+  }
+
+  btn.addEventListener('click', check);
+  pw.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') check();
+  });
+})();
 </script>
 </body>
 </html>
