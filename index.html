@@ -384,10 +384,14 @@ textarea.form-input { min-height: 100px; resize: vertical; }
     <div class="section-line"></div>
   </div>
 
-  <div class="profile-card" style="max-width: 800px; padding: 2rem;">
+  <div style="max-width: 800px; margin-bottom: 2rem; font-family: var(--body); font-size: 14px; color: var(--dim); line-height: 1.7; font-weight: 300;">
+    Working tools I built. Each runs entirely in your browser — no backend, no logging, no data leaves your device beyond what's needed for the API query. <strong style="color: var(--green); font-family: var(--mono); font-weight: 500;">Test them yourself.</strong>
+  </div>
+
+  <div class="profile-card" style="max-width: 800px; padding: 2rem; margin-bottom: 1.5rem;">
     <div class="profile-card-label">// FIELD TOOL // PASSWORD BREACH CHECK</div>
     <div class="profile-card-value" style="margin-bottom: 1.5rem;">
-      Live tool. Checks a password against the <strong>HaveIBeenPwned</strong> breach database using <strong>k-anonymity</strong> — the password is hashed with SHA-1 locally and only the first 5 characters of the hash are sent to the API. <strong>The plaintext never leaves your browser.</strong>
+      Checks a password against the <strong>HaveIBeenPwned</strong> breach database using <strong>k-anonymity</strong> — the password is hashed with SHA-1 locally and only the first 5 characters of the hash are sent to the API. <strong>The plaintext never leaves your browser.</strong>
     </div>
 
     <label class="form-label" style="margin-bottom: 8px;">// PASSWORD //</label>
@@ -401,7 +405,49 @@ textarea.form-input { min-height: 100px; resize: vertical; }
     </div>
 
     <div style="font-size: 9px; letter-spacing: 0.15em; color: var(--dimmest); margin-top: 12px; line-height: 1.6;">
-      DO NOT enter passwords you actually use. This is a demonstration of cybersecurity tooling.
+      DO NOT enter passwords you actually use. This is a demonstration tool.
+    </div>
+  </div>
+
+  <div class="profile-card" style="max-width: 800px; padding: 2rem; margin-bottom: 1.5rem;">
+    <div class="profile-card-label">// FIELD TOOL // EMAIL BREACH SCAN</div>
+    <div class="profile-card-value" style="margin-bottom: 1.5rem;">
+      Queries the <strong>XposedOrNot</strong> public breach database to identify if an email address has appeared in known data breaches. No API key required, no logging.
+    </div>
+
+    <label class="form-label" style="margin-bottom: 8px;">// EMAIL ADDRESS //</label>
+    <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+      <input type="email" id="ebc-email" class="form-input" placeholder="user@example.com" autocomplete="off" style="flex: 1;">
+      <button id="ebc-go" class="btn btn-primary" style="padding: 0 24px;">SCAN</button>
+    </div>
+
+    <div id="ebc-out" style="min-height: 60px; max-height: 320px; overflow-y: auto; padding: 14px 16px; border: 1px solid var(--dimmest); background: var(--green3); font-size: 12px; line-height: 1.7; letter-spacing: 0.04em; font-family: var(--mono);">
+      <span style="color: var(--dim);">// AWAITING INPUT</span>
+    </div>
+
+    <div style="font-size: 9px; letter-spacing: 0.15em; color: var(--dimmest); margin-top: 12px; line-height: 1.6;">
+      Enter your own email or a known test email for demonstration.
+    </div>
+  </div>
+
+  <div class="profile-card" style="max-width: 800px; padding: 2rem;">
+    <div class="profile-card-label">// FIELD TOOL // HASH IDENTIFIER</div>
+    <div class="profile-card-value" style="margin-bottom: 1.5rem;">
+      Identifies hash algorithms by length and character pattern. Useful for incident response when triaging credentials, log artifacts, or captured exploit payloads. Pure pattern matching, no external lookups.
+    </div>
+
+    <label class="form-label" style="margin-bottom: 8px;">// HASH //</label>
+    <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+      <input type="text" id="hid-hash" class="form-input" placeholder="paste a hash to identify" autocomplete="off" style="flex: 1;">
+      <button id="hid-go" class="btn btn-primary" style="padding: 0 24px;">SCAN</button>
+    </div>
+
+    <div id="hid-out" style="min-height: 60px; padding: 14px 16px; border: 1px solid var(--dimmest); background: var(--green3); font-size: 12px; line-height: 1.7; letter-spacing: 0.04em; font-family: var(--mono);">
+      <span style="color: var(--dim);">// AWAITING INPUT</span>
+    </div>
+
+    <div style="font-size: 9px; letter-spacing: 0.15em; color: var(--dimmest); margin-top: 12px; line-height: 1.6;">
+      Identification is by length and format — multiple algorithms may share patterns.
     </div>
   </div>
 </section>
@@ -544,7 +590,6 @@ var boot = document.getElementById('boot');
 var bootLinesEl = document.getElementById('boot-lines');
 var lineIndex = 0;
 var charIndex = 0;
-var currentLine = '';
 var lineEl = null;
 
 function typeLine() {
@@ -624,7 +669,6 @@ setTimeout(typeLine, 300);
       out.innerHTML = '<span style="color: var(--amber);">// EMPTY INPUT — TRY AGAIN</span>';
       return;
     }
-
     out.innerHTML = '<span style="color: var(--dim);">// HASHING LOCALLY...</span>';
 
     try {
@@ -657,6 +701,120 @@ setTimeout(typeLine, 300);
 
   btn.addEventListener('click', check);
   pw.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') check();
+  });
+})();
+
+// ===== EMAIL BREACH CHECKER =====
+(function() {
+  const emailIn = document.getElementById('ebc-email');
+  const btn = document.getElementById('ebc-go');
+  const out = document.getElementById('ebc-out');
+  if (!emailIn || !btn || !out) return;
+
+  function isValidEmail(e) {
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e);
+  }
+
+  async function check() {
+    const value = emailIn.value.trim();
+    if (!value) {
+      out.innerHTML = '<span style="color: var(--amber);">// EMPTY INPUT — TRY AGAIN</span>';
+      return;
+    }
+    if (!isValidEmail(value)) {
+      out.innerHTML = '<span style="color: var(--amber);">// INVALID EMAIL FORMAT</span>';
+      return;
+    }
+
+    out.innerHTML = '<span style="color: var(--dim);">// QUERYING XPOSEDORNOT DATABASE...</span>';
+
+    try {
+      const res = await fetch('https://api.xposedornot.com/v1/check-email/' + encodeURIComponent(value));
+      const data = await res.json();
+
+      if (data.Error === 'Not found') {
+        out.innerHTML = '<span style="color: var(--green);">✓ NO BREACHES FOUND</span><br><span style="color: var(--dim); font-size: 10px;">// THIS EMAIL DOES NOT APPEAR IN THE XPOSEDORNOT DATABASE</span>';
+        return;
+      }
+
+      if (data.breaches && data.breaches.length > 0 && data.breaches[0].length > 0) {
+        const breaches = data.breaches[0];
+        let html = '<span style="color: var(--red);">⚠ COMPROMISED // FOUND IN ' + breaches.length + ' BREACHES</span>';
+        html += '<div style="margin-top: 10px; font-size: 11px;">';
+        breaches.slice(0, 12).forEach(b => {
+          html += '<div style="padding: 4px 8px; margin-bottom: 4px; border-left: 2px solid rgba(255,59,59,0.4); background: rgba(255,59,59,0.05);">' + b + '</div>';
+        });
+        if (breaches.length > 12) {
+          html += '<div style="margin-top: 6px; color: var(--dimmer); font-size: 10px;">// + ' + (breaches.length - 12) + ' MORE</div>';
+        }
+        html += '</div>';
+        out.innerHTML = html;
+      } else {
+        out.innerHTML = '<span style="color: var(--green);">✓ NO BREACHES FOUND</span>';
+      }
+    } catch (err) {
+      out.innerHTML = '<span style="color: var(--red);">// ERROR: ' + err.message + '</span>';
+    }
+  }
+
+  btn.addEventListener('click', check);
+  emailIn.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') check();
+  });
+})();
+
+// ===== HASH IDENTIFIER =====
+(function() {
+  const hashIn = document.getElementById('hid-hash');
+  const btn = document.getElementById('hid-go');
+  const out = document.getElementById('hid-out');
+  if (!hashIn || !btn || !out) return;
+
+  const patterns = [
+    { regex: /^[a-f0-9]{32}$/i, names: ['MD5', 'MD4', 'NTLM', 'LM'], note: '128-bit hash. Common in older systems, malware IOCs, and Windows credentials (NTLM/LM).' },
+    { regex: /^[a-f0-9]{40}$/i, names: ['SHA-1'], note: '160-bit hash. Deprecated for security but still seen in legacy systems and Git commits.' },
+    { regex: /^[a-f0-9]{56}$/i, names: ['SHA-224'], note: '224-bit hash from the SHA-2 family.' },
+    { regex: /^[a-f0-9]{64}$/i, names: ['SHA-256', 'SHA3-256', 'BLAKE2s'], note: '256-bit hash. Modern standard for password storage, file integrity, and blockchain.' },
+    { regex: /^[a-f0-9]{96}$/i, names: ['SHA-384'], note: '384-bit hash from the SHA-2 family.' },
+    { regex: /^[a-f0-9]{128}$/i, names: ['SHA-512', 'SHA3-512', 'BLAKE2b', 'Whirlpool'], note: '512-bit hash. High-security applications and modern password hashing.' },
+    { regex: /^\$2[aby]\$\d{2}\$[./A-Za-z0-9]{53}$/, names: ['bcrypt'], note: 'Adaptive password hash. Identified by $2a$ / $2b$ / $2y$ prefix. Industry standard for password storage.' },
+    { regex: /^\$argon2(id|i|d)\$/, names: ['Argon2'], note: 'Memory-hard password hash. Winner of the 2015 Password Hashing Competition.' },
+    { regex: /^\$6\$/, names: ['SHA-512 crypt'], note: 'Unix shadow file password hash. Found in /etc/shadow on Linux systems.' },
+    { regex: /^\$5\$/, names: ['SHA-256 crypt'], note: 'Unix shadow file password hash.' },
+    { regex: /^\$1\$/, names: ['MD5 crypt'], note: 'Legacy Unix shadow file password hash.' },
+    { regex: /^[a-f0-9]{16}$/i, names: ['MySQL323', 'CRC-64'], note: '64-bit hash. Old MySQL password format or CRC checksum.' },
+    { regex: /^\*[A-F0-9]{40}$/i, names: ['MySQL5'], note: 'Modern MySQL password hash (SHA-1 based, prefixed with *).' },
+  ];
+
+  function check() {
+    const value = hashIn.value.trim();
+    if (!value) {
+      out.innerHTML = '<span style="color: var(--amber);">// EMPTY INPUT — TRY AGAIN</span>';
+      return;
+    }
+
+    const matches = patterns.filter(p => p.regex.test(value));
+
+    if (matches.length === 0) {
+      out.innerHTML = '<span style="color: var(--amber);">⚠ NO PATTERN MATCH</span><br><span style="color: var(--dim); font-size: 10px;">// LENGTH: ' + value.length + ' CHARS — DOES NOT MATCH KNOWN HASH FORMATS</span>';
+      return;
+    }
+
+    let html = '<span style="color: var(--green);">✓ MATCHED ' + matches.length + ' POSSIBLE FORMAT(S)</span>';
+    html += '<div style="margin-top: 10px;">';
+    matches.forEach(m => {
+      html += '<div style="padding: 6px 10px; margin-bottom: 6px; border-left: 2px solid var(--green4); background: var(--green3);">';
+      html += '<div style="color: var(--green); font-weight: 700; font-size: 12px; letter-spacing: 0.1em;">' + m.names.join(' / ') + '</div>';
+      html += '<div style="color: var(--dim); font-size: 10px; margin-top: 4px; font-family: var(--body); line-height: 1.6; letter-spacing: 0;">' + m.note + '</div>';
+      html += '</div>';
+    });
+    html += '</div>';
+    out.innerHTML = html;
+  }
+
+  btn.addEventListener('click', check);
+  hashIn.addEventListener('keydown', function(e) {
     if (e.key === 'Enter') check();
   });
 })();
